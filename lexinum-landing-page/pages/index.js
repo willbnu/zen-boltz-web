@@ -3,16 +3,16 @@ import Head from 'next/head';
     import CTAButtons from '../components/CTAButtons';
     import Header from '../components/Header';
     import Footer from '../components/Footer';
+    import { detectLanguage } from '../lib/languageDetection';
+    import { useEffect, useState } from 'react';
 
     const Home = () => {
-      // Basic language detection (replace with more robust solution later)
-      const userLanguage =
-        typeof window !== 'undefined'
-          ? navigator.language || navigator.userLanguage
-          : 'en';
-      const detectedLanguage = ['en', 'es', 'jp'].includes(userLanguage.slice(0, 2))
-        ? userLanguage.slice(0, 2)
-        : 'en';
+
+      const [language, setLanguage] = useState('en');
+
+      useEffect(() => {
+          setLanguage(detectLanguage());
+      }, []);
 
       return (
         <div>
@@ -23,12 +23,9 @@ import Head from 'next/head';
           </Head>
 
           <Header />
-          <Hero />
-          <CTAButtons />
+          <Hero lang={language}/>
+          <CTAButtons lang={language}/>
           <Footer />
-
-          {/* Display detected language for testing */}
-          <div className="text-center p-4">Detected Language: {detectedLanguage}</div>
         </div>
       );
     };
